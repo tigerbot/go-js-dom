@@ -409,7 +409,7 @@ type EventTarget interface {
 	// AddEventListener adds a new event listener and returns the
 	// wrapper function it generated. If using RemoveEventListener,
 	// that wrapper has to be used.
-	AddEventListener(typ string, useCapture bool, listener func(Event)) func(js.Value)
-	RemoveEventListener(typ string, useCapture bool, listener func(js.Value))
+	AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback
+	RemoveEventListener(typ string, useCapture bool, listener js.Callback)
 	DispatchEvent(event Event) bool
 }
