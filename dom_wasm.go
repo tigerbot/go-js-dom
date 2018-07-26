@@ -1089,8 +1089,8 @@ func (w *window) Stop() {
 // TODO reuse util.EventTarget
 
 func (w *window) AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback {
-	wrapper := func(o []js.Value) { listener(wrapEvent(o[0])) }
-	cb := js.NewCallback(wrapper)
+	wrapper := func(o js.Value) { listener(wrapEvent(o)) }
+	cb := js.NewEventCallback(0, wrapper)
 	w.Call("addEventListener", typ, cb, useCapture)
 	return cb
 }
@@ -1275,8 +1275,8 @@ func (n *BasicNode) Underlying() js.Value {
 }
 
 func (n *BasicNode) AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback {
-	wrapper := func(o []js.Value) { listener(wrapEvent(o[0])) }
-	cb := js.NewCallback(wrapper)
+	wrapper := func(o js.Value) { listener(wrapEvent(o)) }
+	cb := js.NewEventCallback(0, wrapper)
 	n.Object.Call("addEventListener", typ, cb, useCapture)
 	return cb
 }
