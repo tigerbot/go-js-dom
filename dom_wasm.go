@@ -706,8 +706,7 @@ func (d document) CreateElementNS(ns string, name string) Element {
 }
 
 func (d document) CreateTextNode(s string) *Text {
-	n :=wrapNode(d.Object.Call("createTextNode", s)).(Text)
-	return &n
+	return wrapNode(d.Object.Call("createTextNode", s)).(*Text)
 }
 
 func (d document) ElementFromPoint(x, y int) Element {
