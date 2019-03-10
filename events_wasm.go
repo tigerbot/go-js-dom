@@ -407,9 +407,9 @@ type WheelEvent struct {
 
 type EventTarget interface {
 	// AddEventListener adds a new event listener and returns the
-	// wrapper function it generated. If using RemoveEventListener,
-	// that wrapper has to be used.
-	AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback
-	RemoveEventListener(typ string, useCapture bool, listener js.Callback)
+	// function it created. If using RemoveEventListener,
+	// that function has to be used.
+	AddEventListener(typ string, listener func(Event), useCapture bool) js.Func
+	RemoveEventListener(typ string, listener js.Func, useCapture bool)
 	DispatchEvent(event Event) bool
 }

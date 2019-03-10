@@ -1088,14 +1088,16 @@ func (w *window) Stop() {
 
 // TODO reuse util.EventTarget
 
-func (w *window) AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback {
-	wrapper := func(o js.Value) { listener(wrapEvent(o)) }
-	cb := js.NewEventCallback(0, wrapper)
-	w.Call("addEventListener", typ, cb, useCapture)
-	return cb
+func (w *window) AddEventListener(typ string, listener func(Event), useCapture bool) js.Func {
+	fn := js.FuncOf(func(_ js.Value, args []js.Value) interface{} {
+		listener(wrapEvent(args[0]))
+		return nil
+	})
+	w.Call("addEventListener", typ, fn, useCapture)
+	return fn
 }
 
-func (w *window) RemoveEventListener(typ string, useCapture bool, listener js.Callback) {
+func (w *window) RemoveEventListener(typ string, listener js.Func, useCapture bool) {
 	w.Call("removeEventListener", typ, listener, useCapture)
 	listener.Release()
 }
@@ -1274,14 +1276,16 @@ func (n *BasicNode) Underlying() js.Value {
 	return n.Object
 }
 
-func (n *BasicNode) AddEventListener(typ string, useCapture bool, listener func(Event)) js.Callback {
-	wrapper := func(o js.Value) { listener(wrapEvent(o)) }
-	cb := js.NewEventCallback(0, wrapper)
-	n.Object.Call("addEventListener", typ, cb, useCapture)
-	return cb
+func (n *BasicNode) AddEventListener(typ string, listener func(Event), useCapture bool) js.Func {
+	fn := js.FuncOf(func(_ js.Value, args []js.Value) interface{} {
+		listener(wrapEvent(args[0]))
+		return nil
+	})
+	n.Object.Call("addEventListener", typ, fn, useCapture)
+	return fn
 }
 
-func (n *BasicNode) RemoveEventListener(typ string, useCapture bool, listener js.Callback) {
+func (n *BasicNode) RemoveEventListener(typ string, listener js.Func, useCapture bool) {
 	n.Object.Call("removeEventListener", typ, listener, useCapture)
 	listener.Release()
 }
