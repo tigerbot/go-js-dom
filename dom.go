@@ -1076,13 +1076,13 @@ func (w *window) Stop() {
 
 // TODO reuse util.EventTarget
 
-func (w *window) AddEventListener(typ string, useCapture bool, listener func(Event)) func(o *js.Object) {
-	wrapper := func(o *js.Object) { listener(wrapEvent(o)) }
-	w.Call("addEventListener", typ, wrapper, useCapture)
-	return wrapper
+func (w *window) AddEventListener(typ string, listener func(Event), useCapture bool) func(o *js.Object) {
+	fn := func(o *js.Object) { listener(wrapEvent(o)) }
+	w.Call("addEventListener", typ, fn, useCapture)
+	return fn
 }
 
-func (w *window) RemoveEventListener(typ string, useCapture bool, listener func(*js.Object)) {
+func (w *window) RemoveEventListener(typ string, listener func(*js.Object), useCapture bool) {
 	w.Call("removeEventListener", typ, listener, useCapture)
 }
 
@@ -1259,13 +1259,13 @@ func (n *BasicNode) Underlying() *js.Object {
 	return n.Object
 }
 
-func (n *BasicNode) AddEventListener(typ string, useCapture bool, listener func(Event)) func(*js.Object) {
-	wrapper := func(o *js.Object) { listener(wrapEvent(o)) }
-	n.Call("addEventListener", typ, wrapper, useCapture)
-	return wrapper
+func (n *BasicNode) AddEventListener(typ string, listener func(Event), useCapture bool) func(*js.Object) {
+	fn := func(o *js.Object) { listener(wrapEvent(o)) }
+	n.Call("addEventListener", typ, fn, useCapture)
+	return fn
 }
 
-func (n *BasicNode) RemoveEventListener(typ string, useCapture bool, listener func(*js.Object)) {
+func (n *BasicNode) RemoveEventListener(typ string, listener func(*js.Object), useCapture bool) {
 	n.Call("removeEventListener", typ, listener, useCapture)
 }
 
